@@ -700,11 +700,16 @@ ol.interaction.Modify.prototype.handlePointerAtPixel_ = function(pixel, map) {
         ol.coordinate.squaredDistanceToSegment(pixelCoordinate, b.segment);
   };
 
+  var upperLeft = map.getCoordinateFromPixel(
+    [pixel[0] - this.pixelTolerance_, pixel[1] + this.pixelTolerance_]);
   var lowerLeft = map.getCoordinateFromPixel(
-      [pixel[0] - this.pixelTolerance_, pixel[1] + this.pixelTolerance_]);
+    [pixel[0] - this.pixelTolerance_, pixel[1] - this.pixelTolerance_]);
   var upperRight = map.getCoordinateFromPixel(
-      [pixel[0] + this.pixelTolerance_, pixel[1] - this.pixelTolerance_]);
-  var box = ol.extent.boundingExtent([lowerLeft, upperRight]);
+    [pixel[0] + this.pixelTolerance_, pixel[1] + this.pixelTolerance_]);
+  var lowerRight = map.getCoordinateFromPixel(
+    [pixel[0] + this.pixelTolerance_, pixel[1] - this.pixelTolerance_]);
+
+  var box = ol.extent.boundingExtent([upperLeft, upperRight, lowerRight, lowerLeft]);
 
   var rBush = this.rBush_;
   var nodes = rBush.getInExtent(box);
